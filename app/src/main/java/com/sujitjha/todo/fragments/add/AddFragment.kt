@@ -13,6 +13,7 @@ import com.sujitjha.data.models.Priority
 import com.sujitjha.data.models.ToDoData
 import com.sujitjha.data.viewmodel.ToDoViewModel
 import com.sujitjha.todo.R
+import com.sujitjha.todo.databinding.FragmentAddBinding
 import com.sujitjha.todo.fragments.SharedViewModel
 
 class AddFragment : Fragment() {
@@ -20,21 +21,28 @@ class AddFragment : Fragment() {
     private val mToDoViewModel :ToDoViewModel by viewModels()
     private val mSharedViewModel : SharedViewModel by viewModels()
 
+    private lateinit var editText : EditText
+    private lateinit var mPriority: Priority
+    private lateinit var mDescription :EditText
+
+    private var _binding: FragmentAddBinding? = null
+    private val binding get() = _binding!!
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
 
-
         // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_add, container, false)
+        _binding = FragmentAddBinding.inflate(layoutInflater, container, false)
 
         setHasOptionsMenu(true)
 
-        view.findViewById<Spinner>(R.id.priority_spiner).onItemSelectedListener = mSharedViewModel.listener
+        binding.prioritySpiner.onItemSelectedListener = mSharedViewModel.listener
 
-        return view
+        return binding.root
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -53,9 +61,9 @@ class AddFragment : Fragment() {
 
     private fun insertDataToDb() {
 
-        val mTitle = view?.findViewById<EditText>(R.id.title_et)!!.text.toString()
-        val mPriority = view?.findViewById<Spinner>(R.id.priority_spiner)!!.selectedItem.toString()
-        val mDescription = view?.findViewById<EditText>(R.id.description_et)!!.text.toString()
+        val mTitle = binding.titleEt.text.toString()
+        val mPriority = binding.prioritySpiner.selectedItem.toString()
+        val mDescription = binding.descriptionEt.text.toString()
 
         val validation = mSharedViewModel.verifyDataFromTheUser(mTitle,mDescription)
 
