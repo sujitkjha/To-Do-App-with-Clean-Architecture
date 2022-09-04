@@ -1,10 +1,7 @@
 package com.sujitjha.data
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
-import androidx.room.OnConflictStrategy
+import androidx.room.*
 import com.sujitjha.data.models.ToDoData
 
 
@@ -15,6 +12,9 @@ interface ToDoDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertData(toDoData: ToDoData)
+
+    @Update (onConflict = OnConflictStrategy.IGNORE)
+    suspend fun updateData(toDoData: ToDoData)
 
 
 }

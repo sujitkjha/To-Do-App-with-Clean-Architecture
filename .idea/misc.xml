@@ -5,6 +5,7 @@
       <map>
         <entry key="app/src/main/res/drawable/custom_input.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_add.xml" value="0.285" />
+        <entry key="app/src/main/res/drawable/ic_check.xml" value="0.2185" />
         <entry key="app/src/main/res/drawable/ic_database.xml" value="0.18" />
         <entry key="app/src/main/res/drawable/ic_search.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/item_background.xml" value="0.1" />
@@ -12,11 +13,11 @@
         <entry key="app/src/main/res/layout/fragment_add.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_list.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_update.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/row_layout.xml" value="0.375" />
+        <entry key="app/src/main/res/layout/row_layout.xml" value="0.25" />
         <entry key="app/src/main/res/menu-v26/list_fragment_menu.xml" value="0.1" />
         <entry key="app/src/main/res/menu/add_fragment_menu.xml" value="0.390625" />
         <entry key="app/src/main/res/menu/list_fragment_menu.xml" value="0.1" />
-        <entry key="app/src/main/res/menu/update_fragment_menu.xml" value="0.390625" />
+        <entry key="app/src/main/res/menu/update_fragment_menu.xml" value="0.1" />
       </map>
     </option>
   </component>

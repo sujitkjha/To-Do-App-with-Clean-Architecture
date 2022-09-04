@@ -40,9 +40,9 @@ class SharedViewModel (application: Application) :AndroidViewModel(application){
             "High Priority" -> {
                 Priority.HIGH}
             "Medium Priority" -> {
-                Priority.HIGH}
+                Priority.MEDIUM}
             "Low Priority" -> {
-                Priority.HIGH}
+                Priority.LOW}
             else
             -> Priority.LOW
         }
@@ -54,6 +54,14 @@ class SharedViewModel (application: Application) :AndroidViewModel(application){
             false
         } else !(title.isEmpty() || description.isEmpty())
 
+    }
+
+     fun parsePriorityToInt(priority: Priority) :Int{
+        return when(priority){
+            Priority.HIGH ->0
+            Priority.MEDIUM ->1
+            Priority.LOW ->2
+        }
     }
 
 }
