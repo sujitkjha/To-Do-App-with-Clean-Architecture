@@ -1,5 +1,6 @@
 package com.sujitjha.todo.fragments.update
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.*
 import android.widget.EditText
@@ -15,7 +16,7 @@ import com.sujitjha.data.viewmodel.ToDoViewModel
 import com.sujitjha.todo.R
 import com.sujitjha.todo.fragments.SharedViewModel
 
-class UpdateFragment : Fragment() {
+class UpdateFragment : androidx.fragment.app.Fragment() {
 
     private val args by navArgs<UpdateFragmentArgs>()
 
@@ -48,12 +49,14 @@ class UpdateFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
-        if(item.itemId ==R.id.update){
-            updateItem()
+        when(item.itemId){
+           R.id.update -> updateItem()
+           R.id.delete -> confirmItemRemoval()
         }
 
         return super.onOptionsItemSelected(item)
     }
+
 
     private fun updateItem() {
         val title = view?.findViewById<EditText>(R.id.current_title_et)!!.text.toString()
@@ -76,5 +79,24 @@ class UpdateFragment : Fragment() {
         } else{
             Toast.makeText(context,"Fill out all fields",Toast.LENGTH_SHORT).show()
         }
+    }
+
+    //Show alert Dialog to confirm item removal
+    private fun confirmItemRemoval() {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setPositiveButton("Yes") {
+                _, _->
+            mToDoViewModel.deleteItem(args.currentItem)
+            Toast.makeText(
+                requireContext(),
+                "Sucessfully removed : '${args.currentItem.title}'",
+                Toast.LENGTH_LONG
+            ).show()
+            findNavController().navigate(R.id.action_updateFragment_to_listFragment)
+        }
+        builder.setNegativeButton("No"){_,_ ->}
+        builder.setTitle("Delete '${(args.currentItem.title)}'")
+        builder.setMessage("Are you sure you want to remove '${args.currentItem.title}'")
+        builder.create().show()
     }
 }
