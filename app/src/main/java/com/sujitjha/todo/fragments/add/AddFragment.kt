@@ -19,9 +19,6 @@ class AddFragment : Fragment() {
     private val mToDoViewModel :ToDoViewModel by viewModels()
     private val mSharedViewModel : SharedViewModel by viewModels()
 
-    private lateinit var editText : EditText
-    private lateinit var mPriority: Priority
-    private lateinit var mDescription :EditText
 
     private var _binding: FragmentAddBinding? = null
     private val binding get() = _binding!!
@@ -83,6 +80,11 @@ class AddFragment : Fragment() {
         } else {
             Toast.makeText(requireContext()," Fill out the fields",Toast.LENGTH_SHORT).show()
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
 }

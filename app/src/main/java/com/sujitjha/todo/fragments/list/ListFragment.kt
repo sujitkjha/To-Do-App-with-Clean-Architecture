@@ -6,8 +6,10 @@ import android.os.Bundle
 import android.view.*
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -19,7 +21,7 @@ import com.sujitjha.todo.fragments.SharedViewModel
 import com.sujitjha.todo.fragments.add.SwapToDelete
 import com.sujitjha.todo.fragments.list.adapter.ListAdapter
 
-class ListFragment : Fragment() {
+class ListFragment : Fragment(), SearchView.OnQueryTextListener {
 
     private val mToDoViewModel :ToDoViewModel by viewModels()
     private val mSharedViewModel :SharedViewModel by viewModels()
@@ -82,12 +84,28 @@ class ListFragment : Fragment() {
     }
 
 
+    override fun onQueryTextSubmit(query: String?): Boolean {
+       if(query !=null){
+           searchThroughDatabase(query)
+       }
+        return true
+    }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if(item.itemId == R.id.menu_delete_all){
-            confirmedRemoval()
+    override fun onQueryTextChange(query: String?): Boolean {
+        if(query !=null){
+            searchThroughDatabase(query)
         }
-        return super.onOptionsItemSelected(item)
+        return true
+    }
+
+    private fun searchThroughDatabase(query: String) {
+
+        var searchQuery = "%${query}%"
+        mToDoViewModel.searchDatabase(searchQuery).observe(this, Observer {
+            list ->
+            list?.let { adapter.setData(it)}
+        })
+
     }
 
     //Alert Dialog to confirm removal of all data from database
@@ -111,5 +129,21 @@ class ListFragment : Fragment() {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.list_fragment_menu,menu)
+
+        val search = menu.findItem(R.id.menu_search)
+        val searchView =search.actionView as? SearchView
+        searchView?.isSubmitButtonEnabled= true
+        searchView?.setOnQueryTextListener(this)
+
     }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId ){
+            R.id.menu_delete_all -> confirmedRemoval()
+            R.id.menu_priority_high -> mToDoViewModel.sortByHighPriority.observe(this, Observer { adapter.setData(it) })
+            R.id.menu_priority_low ->mToDoViewModel.sortByLowPriority.observe(this, Observer { adapter.setData(it) })
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
 }
