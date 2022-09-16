@@ -8,8 +8,8 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import com.sujitjha.data.models.Priority
-import com.sujitjha.data.models.ToDoData
+import com.sujitjha.todo.data.models.Priority
+import com.sujitjha.todo.data.models.ToDoData
 import com.sujitjha.todo.R
 
 class SharedViewModel (application: Application) :AndroidViewModel(application){
@@ -64,12 +64,12 @@ class SharedViewModel (application: Application) :AndroidViewModel(application){
 
     }
 
-     fun parsePriorityToInt(priority: Priority) :Int{
+     /*fun parsePriorityToInt(priority: Priority) :Int{
         return when(priority){
             Priority.HIGH ->0
             Priority.MEDIUM ->1
             Priority.LOW ->2
         }
-    }
+    }*/
 
 }

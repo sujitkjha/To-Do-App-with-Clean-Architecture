@@ -1,8 +1,8 @@
-package com.sujitjha.data
+package com.sujitjha.todo.data
 
 import android.content.Context
 import androidx.room.*
-import com.sujitjha.data.models.ToDoData
+import com.sujitjha.todo.data.models.ToDoData
 
 @Database(entities = [ToDoData::class], version = 2, exportSchema = false)
 

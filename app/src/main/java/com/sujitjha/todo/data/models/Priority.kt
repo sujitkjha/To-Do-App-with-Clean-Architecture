@@ -1,4 +1,4 @@
-package com.sujitjha.data.models
+package com.sujitjha.todo.data.models
 
 enum class Priority {
     HIGH,

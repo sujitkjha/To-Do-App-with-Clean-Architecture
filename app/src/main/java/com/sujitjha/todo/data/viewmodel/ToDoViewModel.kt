@@ -1,12 +1,12 @@
-package com.sujitjha.data.viewmodel
+package com.sujitjha.todo.data.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
-import com.sujitjha.data.ToDoDatabase
-import com.sujitjha.data.models.ToDoData
-import com.sujitjha.data.repository.ToDoRepository
+import com.sujitjha.todo.data.ToDoDatabase
+import com.sujitjha.todo.data.models.ToDoData
+import com.sujitjha.todo.data.repository.ToDoRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 

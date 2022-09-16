@@ -1,17 +1,15 @@
 package com.sujitjha.todo.fragments.add
 
 import android.os.Bundle
-import android.text.TextUtils
 import android.view.*
 import android.widget.EditText
-import android.widget.Spinner
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.sujitjha.data.models.Priority
-import com.sujitjha.data.models.ToDoData
-import com.sujitjha.data.viewmodel.ToDoViewModel
+import com.sujitjha.todo.data.models.Priority
+import com.sujitjha.todo.data.models.ToDoData
+import com.sujitjha.todo.data.viewmodel.ToDoViewModel
 import com.sujitjha.todo.R
 import com.sujitjha.todo.databinding.FragmentAddBinding
 import com.sujitjha.todo.fragments.SharedViewModel

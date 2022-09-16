@@ -4,28 +4,28 @@ import android.app.AlertDialog
 import android.os.Build
 import android.os.Bundle
 import android.view.*
-import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.sujitjha.data.models.ToDoData
-import com.sujitjha.data.viewmodel.ToDoViewModel
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.sujitjha.todo.data.viewmodel.ToDoViewModel
 import com.sujitjha.todo.R
+import com.sujitjha.todo.databinding.FragmentListBinding
 import com.sujitjha.todo.fragments.SharedViewModel
+import com.sujitjha.todo.fragments.add.SwapToDelete
+import com.sujitjha.todo.fragments.list.adapter.ListAdapter
 
 class ListFragment : Fragment() {
 
     private val mToDoViewModel :ToDoViewModel by viewModels()
-
     private val mSharedViewModel :SharedViewModel by viewModels()
+
+    private var _binding : FragmentListBinding?=null
+    private val binding get() =_binding!!
 
     private val adapter: ListAdapter by lazy { ListAdapter() }
 
@@ -34,46 +34,54 @@ class ListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_list, container, false)
+        // Data binding
+     _binding = FragmentListBinding.inflate(inflater,container,false)
 
-        val recyclerView = view.requireViewById<RecyclerView>(R.id.recyclerView)
-        recyclerView.adapter = adapter
-        recyclerView.layoutManager = LinearLayoutManager(requireActivity())
+        binding.lifecycleOwner =this
+        binding.mSharedViewModel =mSharedViewModel
+       //setup recycler view
+        setupRecyclerview()
 
+        //Observing the live data
         mToDoViewModel.getAllData.observe(viewLifecycleOwner, Observer {
             data ->
             mSharedViewModel.checkIfDatabaseEmpty(data)
             adapter.setData(data)
         })
 
-        mSharedViewModel.emptyDatabase.observe(viewLifecycleOwner, Observer {
-            showEmptyDataBaseViews(it)
-        })
-
-        view.findViewById<FloatingActionButton>(R.id.floatingActionButton).setOnClickListener{
-            findNavController().navigate(R.id.action_listFragment_to_addFragment)
-        }
-
-        view.findViewById<ConstraintLayout>(R.id.listLayout).setOnClickListener{
-            findNavController().navigate(R.id.action_listFragment_to_updateFragment)
-        }
-
         //set Menu
         setHasOptionsMenu(true)
-        return view
+        return binding.root
     }
 
-    private fun showEmptyDataBaseViews(emptyDatabase :Boolean) {
-       if(emptyDatabase){
-           view?.findViewById<ImageView>(R.id.no_data_imageView)?.visibility=View.VISIBLE
-           view?.findViewById<TextView>(R.id.no_data_textView)?.visibility =View.VISIBLE
-       } else{
-           view?.findViewById<ImageView>(R.id.no_data_imageView)?.visibility=View.INVISIBLE
-           view?.findViewById<TextView>(R.id.no_data_textView)?.visibility =View.INVISIBLE
-
-       }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding=null
     }
+
+    private fun setupRecyclerview() {
+        val recyclerView = binding.recyclerView
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL)
+
+        swipeToDelete(recyclerView)
+    }
+
+    private fun swipeToDelete(recyclerView: RecyclerView){
+        val swapToDeleteCallback =object :SwapToDelete(){
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction :Int){
+                val itemToDelete = adapter.dataList[viewHolder.adapterPosition]
+                mToDoViewModel.deleteItem(itemToDelete)
+                Toast.makeText(requireContext(),"Sucessfully Removed: '${itemToDelete.title}'",Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        val itemTouchHelper = ItemTouchHelper(swapToDeleteCallback)
+        itemTouchHelper.attachToRecyclerView(recyclerView)
+
+    }
+
+
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if(item.itemId == R.id.menu_delete_all){

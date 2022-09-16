@@ -1,7 +1,7 @@
-package com.sujitjha.data
+package com.sujitjha.todo.data
 
 import androidx.room.TypeConverter
-import com.sujitjha.data.models.Priority
+import com.sujitjha.todo.data.models.Priority
 
 class Converter {
 
